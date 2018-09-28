@@ -213,7 +213,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ng-container *ngIf=\"authenticated$ | async; else guest\">\n  {{fullName$ | async}}\n</ng-container>\n\n<ng-template #guest>\n  <a [href]=\"authUrl\">\n    <button>Авторизоваться</button>\n  </a>\n</ng-template>\n"
+module.exports = "<ng-container *ngIf=\"authenticated$ | async; else guest\">\n  {{fullName$ | async}}\n\n  <h5>Friends:</h5>\n  <ul>\n    <li *ngFor=\"let name of (friendsNames$ | async)\">\n      {{name}}\n    </li>\n  </ul>\n</ng-container>\n\n<ng-template #guest>\n  <a [href]=\"authUrl\">\n    <button>Авторизоваться</button>\n  </a>\n</ng-template>\n"
 
 /***/ }),
 
@@ -250,13 +250,13 @@ var HomeComponent = /** @class */ (function () {
             ("?client_id=" + _environments_environment__WEBPACK_IMPORTED_MODULE_1__["environment"].vkClientId) +
             "&display=page" +
             ("&redirect_uri=" + this.redirectUri) +
-            "&scope=offline" +
+            "&scope=friends" +
             "&response_type=token" +
             ("&v=" + _environments_environment__WEBPACK_IMPORTED_MODULE_1__["environment"].vkAPIVersion) +
-            "&state=123456" +
-            "&revoke=1";
+            "&state=123456";
         this.authenticated$ = this.vk.authenticated$;
         this.fullName$ = this.vk.fullName$;
+        this.friendsNames = this.vk.friendsNames$;
     }
     HomeComponent.prototype.ngOnInit = function () { };
     HomeComponent = __decorate([
@@ -335,10 +335,11 @@ var VKService = /** @class */ (function () {
         this.error$ = this.error.asObservable();
         this.fullName = new rxjs__WEBPACK_IMPORTED_MODULE_2__["BehaviorSubject"](null);
         this.fullName$ = this.fullName.asObservable();
+        this.friendsNames = new rxjs__WEBPACK_IMPORTED_MODULE_2__["BehaviorSubject"]([]);
+        this.friendsNames$ = this.friendsNames.asObservable();
     }
     VKService.prototype.handleAuthenticationResponse = function (response) {
         if ('error' in response) {
-            console.log(response);
             this.accessToken = null;
             this.authenticated.next(false);
             this.error.next(response.error_description);
@@ -349,6 +350,7 @@ var VKService = /** @class */ (function () {
         this.authenticated.next(true);
         this.error.next(null);
         this.getFullName();
+        this.getSomeFriends();
         return true;
     };
     VKService.prototype.getFullName = function () {
@@ -361,8 +363,28 @@ var VKService = /** @class */ (function () {
             }
         }).toString();
         this.http.jsonp(this.baseUrl + "/users.get?" + params, 'callback').subscribe(function (_a) {
-            var _b = _a.response[0], first_name = _b.first_name, last_name = _b.last_name;
+            var response = _a.response;
+            var _b = response[0], first_name = _b.first_name, last_name = _b.last_name;
             _this.fullName.next(first_name + " " + last_name);
+        });
+    };
+    VKService.prototype.getSomeFriends = function () {
+        var _this = this;
+        var params = new _angular_common_http__WEBPACK_IMPORTED_MODULE_0__["HttpParams"]({
+            fromObject: {
+                count: '5',
+                fields: 'first_name, last_name',
+                access_token: this.accessToken,
+                v: _environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].vkAPIVersion
+            }
+        }).toString();
+        this.http.jsonp(this.baseUrl + "/friends.get?" + params, 'callback').subscribe(function (_a) {
+            var response = _a.response;
+            var friends = response.items;
+            _this.friendsNames.next(friends.map(function (_a) {
+                var first_name = _a.first_name, last_name = _a.last_name;
+                return first_name + " " + last_name;
+            }));
         });
     };
     VKService = __decorate([
