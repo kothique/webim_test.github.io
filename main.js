@@ -169,6 +169,9 @@ var CallbackComponent = /** @class */ (function () {
     function CallbackComponent(route, router, vk) {
         this.vk = vk;
         this.error$ = this.vk.error$;
+        if (!route.snapshot.fragment) {
+            router.navigate(['/']);
+        }
         var response = Object(_util__WEBPACK_IMPORTED_MODULE_3__["parseQueryParams"])(route.snapshot.fragment);
         if (vk.handleAuthenticationResponse(response)) {
             router.navigate(['/']);
@@ -354,11 +357,9 @@ var VKService = /** @class */ (function () {
                 v: _environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].vkAPIVersion
             }
         }).toString();
-        this.http.jsonp(this.baseUrl + "/account.getProfileInfo?" + params, 'callback').subscribe({
-            next: function (data) {
-                console.log(data);
-                _this.fullName.next(data.first_name + ' ' + data.last_name);
-            }
+        this.http.jsonp(this.baseUrl + "/account.getProfileInfo?" + params, 'callback').subscribe(function (data) {
+            console.log(data);
+            _this.fullName.next(data.first_name + ' ' + data.last_name);
         });
     };
     VKService = __decorate([
