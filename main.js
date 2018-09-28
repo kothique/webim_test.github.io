@@ -213,7 +213,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ng-container *ngIf=\"authenticated$ | async; else guest\">\n  {{fullName$ | async}}\n\n  <h5>Friends:</h5>\n  <ul>\n    <li *ngFor=\"let name of (friendsNames$ | async)\">\n      {{name}}\n    </li>\n  </ul>\n</ng-container>\n\n<ng-template #guest>\n  <a [href]=\"authUrl\">\n    <button>Авторизоваться</button>\n  </a>\n</ng-template>\n"
+module.exports = "<ng-container *ngIf=\"authenticated$ | async; else guest\">\n  {{fullName$ | async}} <br />\n\n  <h3>Friends:</h3>\n  <ul>\n    <li *ngFor=\"let name of (friendsNames$ | async)\">\n      {{name}}\n    </li>\n  </ul>\n</ng-container>\n\n<ng-template #guest>\n  <a [href]=\"authUrl\">\n    <button>Авторизоваться</button>\n  </a>\n</ng-template>\n"
 
 /***/ }),
 
@@ -256,7 +256,7 @@ var HomeComponent = /** @class */ (function () {
             "&state=123456";
         this.authenticated$ = this.vk.authenticated$;
         this.fullName$ = this.vk.fullName$;
-        this.friendsNames = this.vk.friendsNames$;
+        this.friendsNames$ = this.vk.friendsNames$;
     }
     HomeComponent.prototype.ngOnInit = function () { };
     HomeComponent = __decorate([
