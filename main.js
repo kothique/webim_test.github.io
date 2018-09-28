@@ -242,7 +242,7 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 var HomeComponent = /** @class */ (function () {
     function HomeComponent(vk) {
         this.vk = vk;
-        this.redirectUri = 'http://localhost:4200/callback';
+        this.redirectUri = 'https://kothique.github.io/webim_test.github.io/callback';
         this.authUrl = "https://oauth.vk.com/authorize" +
             ("?client_id=" + _environments_environment__WEBPACK_IMPORTED_MODULE_1__["environment"].vkClientId) +
             "&display=page" +
