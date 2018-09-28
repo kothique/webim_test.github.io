@@ -340,11 +340,18 @@ var VKService = /** @class */ (function () {
         this.friendsNames = new rxjs__WEBPACK_IMPORTED_MODULE_2__["BehaviorSubject"]([]);
         this.friendsNames$ = this.friendsNames.asObservable();
         if (window.localStorage.getItem(VK_ACCESS_TOKEN) !== null) {
-            this.accessToken = window.localStorage.getItem(VK_ACCESS_TOKEN);
-            this.userId = window.localStorage.getItem(VK_USER_ID);
-            this.fetchInfo();
+            this.authenticate(window.localStorage.getItem(VK_ACCESS_TOKEN), window.localStorage.getItem(VK_USER_ID));
         }
     }
+    VKService.prototype.authenticate = function (accessToken, userId) {
+        this.accessToken = accessToken;
+        this.userId = userId;
+        this.authenticated.next(true);
+        this.error.next(null);
+        this.fetchInfo();
+        window.localStorage.setItem(VK_ACCESS_TOKEN, this.accessToken);
+        window.localStorage.setItem(VK_USER_ID, this.userId);
+    };
     VKService.prototype.handleAuthenticationResponse = function (response) {
         if ('error' in response) {
             this.accessToken = null;
@@ -352,13 +359,7 @@ var VKService = /** @class */ (function () {
             this.error.next(response.error_description);
             return false;
         }
-        this.accessToken = response.access_token;
-        this.userId = response.user_id;
-        this.authenticated.next(true);
-        this.error.next(null);
-        this.fetchInfo();
-        window.localStorage.setItem(VK_ACCESS_TOKEN, this.accessToken);
-        window.localStorage.setItem(VK_USER_ID, this.userId);
+        this.authenticate(response.access_token, response.user_id);
         return true;
     };
     VKService.prototype.fetchInfo = function () {
