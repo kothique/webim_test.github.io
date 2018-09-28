@@ -353,11 +353,11 @@ var VKService = /** @class */ (function () {
         var _this = this;
         var params = new _angular_common_http__WEBPACK_IMPORTED_MODULE_0__["HttpParams"]({
             fromObject: {
-                access_toke: this.accessToken,
+                access_token: this.accessToken,
                 v: _environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].vkAPIVersion
             }
         }).toString();
-        this.http.jsonp(this.baseUrl + "/account.getProfileInfo?" + params, 'callback').subscribe(function (data) {
+        this.http.jsonp(this.baseUrl + "/account.getInfo?" + params, 'callback').subscribe(function (data) {
             console.log(data);
             _this.fullName.next(data.first_name + ' ' + data.last_name);
         });
