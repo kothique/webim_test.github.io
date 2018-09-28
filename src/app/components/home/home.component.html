@@ -1,0 +1,16 @@
+<ng-container *ngIf="authenticated$ | async; else guest">
+  <h1>{{fullName$ | async}}</h1>
+
+  <h2>Друзья:</h2>
+  <ul>
+    <li *ngFor="let name of (friendsNames$ | async)">
+      {{name}}
+    </li>
+  </ul>
+</ng-container>
+
+<ng-template #guest>
+  <a [href]="authUrl">
+    <button>Авторизоваться</button>
+  </a>
+</ng-template>
