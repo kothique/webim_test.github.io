@@ -213,7 +213,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ng-container *ngIf=\"authenticated$ | async; else guest\">\n  {{fullName$ | async}}<br />\n\n  Друзья:<br />\n  <ul>\n    <li *ngFor=\"let name of (friendsNames$ | async)\">\n      {{name}}\n    </li>\n  </ul>\n</ng-container>\n\n<ng-template #guest>\n  <a [href]=\"authUrl\">\n    <button>Авторизоваться</button>\n  </a>\n</ng-template>\n"
+module.exports = "<ng-container *ngIf=\"authenticated$ | async; else guest\">\n  <h1>{{fullName$ | async}}</h1>\n\n  <h2>Друзья:</h2>\n  <ul>\n    <li *ngFor=\"let name of (friendsNames$ | async)\">\n      {{name}}\n    </li>\n  </ul>\n</ng-container>\n\n<ng-template #guest>\n  <a [href]=\"authUrl\">\n    <button>Авторизоваться</button>\n  </a>\n</ng-template>\n"
 
 /***/ }),
 
