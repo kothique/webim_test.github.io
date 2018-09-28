@@ -352,6 +352,7 @@ var VKService = /** @class */ (function () {
         return true;
     };
     VKService.prototype.getFullName = function () {
+        var _this = this;
         var params = new _angular_common_http__WEBPACK_IMPORTED_MODULE_0__["HttpParams"]({
             fromObject: {
                 user_ids: this.userId,
@@ -359,10 +360,9 @@ var VKService = /** @class */ (function () {
                 v: _environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].vkAPIVersion
             }
         }).toString();
-        this.http.jsonp(this.baseUrl + "/users.get?" + params, 'callback').subscribe(function (data) {
-            console.log(data);
-            // const 
-            // this.fullName.next(data.first_name + ' ' + data.last_name)
+        this.http.jsonp(this.baseUrl + "/users.get?" + params, 'callback').subscribe(function (_a) {
+            var _b = _a.response[0], first_name = _b.first_name, last_name = _b.last_name;
+            _this.fullName.next(first_name + " " + last_name);
         });
     };
     VKService = __decorate([
