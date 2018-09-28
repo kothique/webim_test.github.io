@@ -328,6 +328,7 @@ var VKService = /** @class */ (function () {
         this.http = http;
         this.baseUrl = 'https://api.vk.com/method';
         this.accessToken = null;
+        this.userId = null;
         this.authenticated = new rxjs__WEBPACK_IMPORTED_MODULE_2__["BehaviorSubject"](false);
         this.authenticated$ = this.authenticated.asObservable();
         this.error = new rxjs__WEBPACK_IMPORTED_MODULE_2__["BehaviorSubject"](null);
@@ -344,22 +345,24 @@ var VKService = /** @class */ (function () {
             return false;
         }
         this.accessToken = response.access_token;
+        this.userId = response.user_id;
         this.authenticated.next(true);
         this.error.next(null);
         this.getFullName();
         return true;
     };
     VKService.prototype.getFullName = function () {
-        var _this = this;
         var params = new _angular_common_http__WEBPACK_IMPORTED_MODULE_0__["HttpParams"]({
             fromObject: {
+                user_ids: this.userId,
                 access_token: this.accessToken,
                 v: _environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].vkAPIVersion
             }
         }).toString();
-        this.http.jsonp(this.baseUrl + "/account.getInfo?" + params, 'callback').subscribe(function (data) {
+        this.http.jsonp(this.baseUrl + "/users.get?" + params, 'callback').subscribe(function (data) {
             console.log(data);
-            _this.fullName.next(data.first_name + ' ' + data.last_name);
+            // const 
+            // this.fullName.next(data.first_name + ' ' + data.last_name)
         });
     };
     VKService = __decorate([
